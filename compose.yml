@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Uptime Kuma
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - uptime-kuma-data:/app/data
+
+  # Flame Dashboard
+  flame-dashboard:
+    image: pawelmalak/flame
+    container_name: flame-dashboard
+    restart: unless-stopped
+    ports:
+      - "5005:5005"
+    volumes:
+      - flame_data:/app/data
+    environment:
+      - PASSWORD=my-secure-password
+
+  # Dozzle
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - dozzle_data:/data
+
+  # FileBrowser
+  filebrowser:
+    image: filebrowser/filebrowser
+    container_name: filebrowser
+    restart: unless-stopped
+    ports:
+      - "8090:80"
+    volumes:
+      - filebrowser_data:/srv
+      - filebrowser_database:/database
+      - filebrowser_config:/config
+
+volumes:
+  uptime_kuma_data:
+  flame_data:
+  dozzle_data:
+  filebrowser_data:
+  filebrowser_database:
+  filebrowser_config:
+
